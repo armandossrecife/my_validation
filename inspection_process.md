@@ -2,9 +2,9 @@
 
 We utilized the ChatGPT tool, implementing Few-shot and Chain-of-thought prompting strategies, to expedite the manual inspection of each issue and identify architectural problems. This decision to employ the tool was aimed at streamlining our inspection process.
 
-As a software developer, we created a classifier of issues from the Apache Cassandra issue tracker. The classifier analyzes each issue and determines whether or not it has an architectural impact. We followed these five steps:
+As a software developer, we created a classifier of issues from the Apache Cassandra issue tracker. The classifier analyzes each issue and determines whether or not it has an architectural impact. 
 
-Is this step we use the following five stages to use the ChatGTP: 
+Is this step we use the following six stages to use the ChatGTP: 
 
 # Stage 1 - Introduction:
 
@@ -162,7 +162,7 @@ In open-source projects like Apache Cassandra, issue trackers play a crucial rol
 
 We provide showcase a few sample issues (issues about task, bug-fix, improvement, and new feature) that have been converted into .txt files. These files contain issue-specific information, including issue ID, type, status, summary, description, and comments. We also mentioned that these issues have already undergone manual inspections without ChatGPT.
 
-You can see the following prompts: S2P1..S2Pk
+You can see the following prompts: S2P1..S2P11
 
 ## Prompt5 (S2P1)
 ```bash
