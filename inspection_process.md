@@ -2,7 +2,21 @@
 
 We utilized the ChatGPT tool, implementing Few-shot and Chain-of-thought prompting strategies, to expedite the manual inspection of each issue and identify architectural problems. This decision to employ the tool was aimed at streamlining our inspection process.
 
-As a software developer, we created a classifier of issues from the Apache Cassandra issue tracker. The classifier analyzes each issue and determines whether or not it has an architectural impact. 
+As a software developer, we created a classifier of issues from the Apache Cassandra issue tracker. The classifier analyzes each issue and determines whether or not it has an architectural impact. The issue labeling process is related to check if the label impacts or no impacts the software architecture of the analyzed repository. 
+
+To enable issue labeling, we followed a structured set of stages to enhance the quality of the labeling process.
+
+In Stage 1 (Introduction), we focused on gaining a deep understanding of the context of Architectural Technical Debt (ATD), Self-Admitted Technical Debt (SATD), commits, and issues, along with their interconnections.
+
+In Stage 2 (Example Showcase), we presented several sample issues, provided instructions and examples for identifying 'Architectural Impact,' and introduced the 'Architectural Impact Classifier' and 'Issues with Architectural Technical Debt.' We also offered numerous examples of issues with ATD and issues without ATD.
+
+Stage 3 (Data Preparation) involved the selection of 100 issues for manual inspection to identify architectural issues and technical debt. These issues were chosen based on their association with commits containing critical classes identified by the ATDCodeAnalyzer and featuring SATD keywords in the commit messages and comments of the commit diffs.
+
+Following the identification of critical issues, each one underwent a thorough inspection. We analyzed the content within the 'summary,' 'description,' and 'comments' fields to detect the presence of SATD keywords. Issues containing these keywords in these fields then underwent a secondary inspection to evaluate their impact on the software's architecture.
+
+This inspection process unfolded in two distinct phases. In the first phase (Stage 4 - Manual Inspection), we manually inspected a sample of 100 critical issues. Each issue was labeled 'yes' or 'no' to signify whether it had an impact on the software's architecture. Subsequently, in the second phase (Stage 5 - ChatGPT Inspection), the same 100 selected critical issues underwent automatic inspection with the assistance of ChatGPT, generating similar 'yes' or 'no' results concerning their architectural impact.
+
+At the conclusion of this process (Stage 6 - Manual Review), we calculated the Cohen's Kappa coefficient to measure the agreement between the results obtained in the first and second phases. This assessment helped determine the consistency between manual and automatic inspections, thereby contributing to a precise analysis of the relationship between critical issues and their effect on the software's architecture
 
 Is this step we use the following six stages to use the ChatGTP: 
 
