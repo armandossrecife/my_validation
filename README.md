@@ -10,9 +10,11 @@ Here, you will find the following files:
 
 **inspecao_completa.xlsx** - A spreadsheet containing the results of inspections.
 
+**issues_in_commits_detailed_muitos_arquivos.xlsx** - A spreadsheet containing the issues that appear in remarkable commits.
+
 **inspection_process.md** - A markdown file that provides an explanation of the inspection process assisted by ChatGPT.
 
 **my_inspection.zip** - A zip file containing all issues to be inspected.
 
-**my_issues.zip** - A zip file that holds the results of the inspection for checking architectural issues and technical debt."
+**my_issues.zip** - A zip file that holds the results of the inspection for checking architectural issues and technical debt.
 
