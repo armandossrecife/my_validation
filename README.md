@@ -4,15 +4,15 @@ The My_validation replication kit was developed out of the necessity to validate
 
 Here, you will find the following files:
 
-My_Commits_and_my_Issues_from_Cassandra.ipynb - A Google Colab notebook that contains all Python scripts, methods, and datasets required to validate the ATDCodeAnalyzer method.
+**My_Commits_and_my_Issues_from_Cassandra.ipynb** - A Google Colab notebook that contains all Python scripts, methods, and datasets required to validate the ATDCodeAnalyzer method.
 
-commits_com_muitos_arquivos_moficiados.xlsx - A spreadsheet containing remarkable commits with many modified files and many lines modified per commit. 
+**commits_com_muitos_arquivos_moficiados.xlsx** - A spreadsheet containing remarkable commits with many modified files and many lines modified per commit. 
 
-inspecao_completa.xlsx - A spreadsheet containing the results of inspections.
+**inspecao_completa.xlsx** - A spreadsheet containing the results of inspections.
 
-inspection_process.md - A markdown file that provides an explanation of the inspection process assisted by ChatGPT.
+**inspection_process.md** - A markdown file that provides an explanation of the inspection process assisted by ChatGPT.
 
-my_inspection.zip - A zip file containing all issues to be inspected.
+**my_inspection.zip** - A zip file containing all issues to be inspected.
 
-my_issues.zip - A zip file that holds the results of the inspection for checking architectural issues and technical debt."
+**my_issues.zip** - A zip file that holds the results of the inspection for checking architectural issues and technical debt."
 
