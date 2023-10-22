@@ -10,7 +10,7 @@ Here, you will find the following files:
 
 **issues_in_commits_detailed_muitos_arquivos.xlsx** - A spreadsheet containing the issues that appear in remarkable commits.
 
-**inspection_process.md** - A markdown file that provides an explanation of the inspection process assisted by ChatGPT.
+**inspection_process.md** - A markdown file that provides an explanation of the inspection process assisted by ChatGPT using prompt engineering method.
 
 **my_issues.zip** - A zip file containing all issues to be inspected.
 
