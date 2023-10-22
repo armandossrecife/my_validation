@@ -8,13 +8,16 @@ Here, you will find the following files:
 
 **commits_com_muitos_arquivos_moficiados.xlsx** - A spreadsheet containing remarkable commits with many modified files and many lines modified per commit. 
 
-**inspecao_completa.xlsx** - A spreadsheet containing the results of inspections.
-
 **issues_in_commits_detailed_muitos_arquivos.xlsx** - A spreadsheet containing the issues that appear in remarkable commits.
 
 **inspection_process.md** - A markdown file that provides an explanation of the inspection process assisted by ChatGPT.
 
-**my_inspection.zip** - A zip file containing all issues to be inspected.
+**my_issues.zip** - A zip file containing all issues to be inspected.
 
-**my_issues.zip** - A zip file that holds the results of the inspection for checking architectural issues and technical debt.
+**my_inspection.zip** - A zip file that holds the results of the inspection for checking architectural issues and technical debt.
 
+**inspecao_manual.xlsx** - A spreadsheet containing the results of manual inspections.
+
+**inspecao_by_chatgpt.xlsx** - A spreadsheet containing the results of manual inspections.
+
+**inspecao_completa.xlsx** - A spreadsheet containing the results of inspections (merge of inspecao_manual and inspecao_by_chatgpt).
