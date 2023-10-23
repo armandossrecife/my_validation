@@ -1,24 +1,32 @@
 # Inspection process aided by ChatGTP
 
-We utilized the ChatGPT tool, implementing Few-shot and Chain-of-thought prompting strategies, to expedite the manual inspection of each issue and identify architectural problems. This decision to employ the tool was aimed at streamlining our inspection process.
+We utilized the ChatGPT tool, implementing Few-shot and Chain-of-thought prompting strategies, to expedite the manual inspection of each issue and identify architectural problems. This decision to employ the tool was aimed at streamlining our inspection process. (https://www.promptingguide.ai/pt)
 
 As a software developer, we created a classifier of issues from the Apache Cassandra issue tracker. The classifier analyzes each issue and determines whether or not it has an architectural impact. The issue labeling process is related to check if the label impacts or no impacts the software architecture of the analyzed repository. 
 
 To enable issue labeling, we followed a structured set of stages to enhance the quality of the labeling process.
 
-In Stage 1 (Introduction), we focused on gaining a deep understanding of the context of Architectural Technical Debt (ATD), Self-Admitted Technical Debt (SATD), commits, and issues, along with their interconnections.
+In Stage 1 (Introduction), we focused on gaining a deep understanding of the context of Software Architecture, Architectural impact, Technical Debt (TD), Architectural Technical Debt (ATD), Self-Admitted Technical Debt (SATD), commits, and issues, along with their interconnections.
 
 In Stage 2 (Example Showcase), we presented several sample issues, provided instructions and examples for identifying 'Architectural Impact,' and introduced the 'Architectural Impact Classifier' and 'Issues with Architectural Technical Debt.' We also offered numerous examples of issues with ATD and issues without ATD.
 
-Stage 3 (Data Preparation) involved the selection of 100 issues for manual inspection to identify architectural issues and technical debt. These issues were chosen based on their association with commits containing critical classes identified by the ATDCodeAnalyzer and featuring SATD keywords in the commit messages and comments of the commit diffs.
+Stage 3 (Data Preparation) involved the selection of 163 issues for manual inspection to identify architectural issues and technical debt. These issues were chosen based on their association with commits containing critical classes identified by the ATDCodeAnalyzer and featuring SATD keywords in the commit messages and comments of the commit diffs.
+
+Stage 4 (Final instruction to start the inspection by ChatGPT)
 
 Following the identification of critical issues, each one underwent a thorough inspection. We analyzed the content within the 'summary,' 'description,' and 'comments' fields to detect the presence of SATD keywords. Issues containing these keywords in these fields then underwent a secondary inspection to evaluate their impact on the software's architecture.
 
-This inspection process unfolded in two distinct phases. In the first phase (Stage 4 - Manual Inspection), we manually inspected a sample of 100 critical issues. Each issue was labeled 'yes' or 'no' to signify whether it had an impact on the software's architecture. Subsequently, in the second phase (Stage 5 - ChatGPT Inspection), the same 100 selected critical issues underwent automatic inspection with the assistance of ChatGPT, generating similar 'yes' or 'no' results concerning their architectural impact.
+This inspection process unfolded in two distinct phases. In the first phase (Manual Inspection), we manually inspected a sample of 163 critical issues. Each issue was labeled 'yes' or 'no' to signify whether it had an impact on the software's architecture. Subsequently, in the second phase (ChatGPT Inspection), the same 163 selected critical issues underwent automatic inspection with the assistance of ChatGPT, generating similar 'yes' or 'no' results concerning their architectural impact.
 
-At the conclusion of this process (Stage 6 - Manual Review), we calculated the Cohen's Kappa coefficient to measure the agreement between the results obtained in the first and second phases. This assessment helped determine the consistency between manual and automatic inspections, thereby contributing to a precise analysis of the relationship between critical issues and their effect on the software's architecture
+At the conclusion of this process (Manual Review), we calculated the Cohen's Kappa coefficient to measure the agreement between the results obtained in the first and second phases. This assessment helped determine the consistency between manual and automatic inspections, thereby contributing to a precise analysis of the relationship between critical issues and their effect on the software's architecture
 
-Is this step we use the following six stages to use the ChatGTP: 
+Is this step we use the following stages to use the ChatGTP: 
+
+# Setup ChatGPT to aid issue inspection (Stage1, Stage2, Stage3 and Stage 4)
+
+The stage 3 is just the manual seleciont of the 163 files to be passed after stage 4 is ready to start the inspection process. 
+
+All the 16 prompts (S1P1..S1P4, S2P1..S2P11 and S4P1) must be executed in this sequence to model be effectively. 
 
 # Stage 1 - Introduction:
 
@@ -28,64 +36,79 @@ You can see the following prompts: S1P1..S1P4
 
 ## Prompt1 (S1P1): 
 ```bash
-Lets talk about the following topics: Architectural Technical Debt (ATD) and Self-admitted Technical Debt (SATD).
+# Stage 1 #
+## Introduction ##
+### Contextualization ### 
+Lets talk about the following topics: Software Architecture, Architectural Issues, Technical Debt (TD), Architectural Technical Debt (ATD) and Self-admitted Technical Debt (SATD).
 ```
 ## Answer1 (S1A1): 
 ```bash
-Certainly! Let's discuss Architectural Technical Debt (ATD) and Self-admitted Technical Debt (SATD) in the context of software development.
+Certainly, let's provide an overview of the key concepts related to software architecture, architectural issues, technical debt, architectural technical debt (ATD), and self-admitted technical debt (SATD):
+
+Software Architecture:
+
+Software architecture refers to the high-level structure of a software system. It defines the system's components, their relationships, and the principles and guidelines governing their design. It is a blueprint that provides a foundation for software development and maintenance.
+Architectural Issues:
+
+Architectural issues are problems or concerns related to the design and structure of a software system. These issues can arise due to architectural decisions, such as the choice of patterns, components, or communication mechanisms. Resolving architectural issues is crucial for maintaining a healthy and scalable software architecture.
+Technical Debt (TD):
+
+Technical debt is a metaphorical concept that describes the trade-off between the short-term benefits of rapid development and the long-term costs of code that is not ideal or maintainable. It represents tasks or issues that need to be addressed in the future to ensure the software remains robust.
 Architectural Technical Debt (ATD):
-Architectural Technical Debt refers to the issues and problems that arise from architectural decisions made during the software development process. These decisions can include the choice of frameworks, libraries, and design patterns, as well as the overall structure and organization of the codebase. ATD can accumulate over time and hinder the maintainability and scalability of a software system. Some key points about ATD:
-Causes: ATD can result from time and budget constraints, lack of expertise, or simply making suboptimal architectural choices.
-Effects: It can lead to increased development and maintenance costs, decreased system stability, and slower feature delivery.
-Mitigation: To address ATD, teams should regularly assess the architecture, refactor when necessary, and allocate resources to address architectural issues as they arise.
+
+Architectural technical debt (ATD) specifically relates to issues in the software architecture. These issues can include design flaws, outdated components, or architectural choices that need reevaluation. ATD can accumulate over time if architectural concerns are not properly addressed.
 Self-admitted Technical Debt (SATD):
-Self-admitted Technical Debt, as the name suggests, is a type of technical debt that developers themselves acknowledge within the codebase. It is essentially a way of flagging issues or suboptimal code, often through comments or annotations within the code. Key points about SATD:
-Identification: SATD is typically identified by developers who explicitly document that certain code sections, functions, or components are not up to the desired standard or need improvement.
-Examples: SATD can be in the form of comments like "TODO," "FIXME," or "Refactor," indicating that the code in question requires attention.
-Advantages: While SATD represents a debt, it can also serve as a helpful mechanism for tracking and managing technical debt, as it highlights areas that need improvement.
-In practice, managing both ATD and SATD is crucial for maintaining a healthy and sustainable software development process. Regularly addressing architectural technical debt helps ensure the long-term stability and scalability of a software system, while self-admitted technical debt can serve as a practical reminder for developers to revisit and improve problematic code sections. However, it's essential to have processes in place for addressing both types of technical debt to prevent it from accumulating and negatively impacting a project's success.
+
+Self-admitted technical debt (SATD) refers to technical debt that developers or teams explicitly acknowledge within the codebase. SATD is typically documented in code comments, commit messages, or issue trackers. It can help in identifying and prioritizing areas that require architectural improvement.
+Understanding these concepts is essential for managing software systems effectively. Addressing architectural issues and technical debt, including ATD and SATD, is critical for maintaining a software system's health, scalability, and long-term viability. It involves making informed decisions, prioritizing work, and continuously improving the software architecture.
 ```
 
 ## Prompt2 (S1P2): 
 ```bash
-Another important topic that could be usefull and related to ATD and SATD is save Tasks or Issues in Issue Tracker System, because it can keep a history of all tasks about improvement, bug-fix, and new features implemented in the software system. Generally, a issue has important data like issue_id, summary, description and comments that contains a lot of important information about improvement taks, bug-fix task or new feature task to help developers to work in the issues.
+# Stage 1 #
+## Introduction ##
+### Contextualization ### 
+Another important topic that could be usefull and related to architectural issue, ATD, TD and SATD is save Tasks or Issues in Issue Tracker System, because it can keep a history of all tasks about improvement, bug-fix, and new features implemented in the software system. Generally, an issue has important data like issue_id, summary, description and comments that contains a lot of important information about improvement task, bug-fix task or new feature task to help developers to work in the issues.
 ```
 
 ## Answer2 (S1A2): 
 ```bash
-You're absolutely right; using an Issue Tracker System is a crucial component in managing both Architectural Technical Debt (ATD) and Self-admitted Technical Debt (SATD), as well as tracking the progress of various tasks and improvements in a software project. Here's how it's related and its importance:
+Absolutely, the use of an Issue Tracker System is a crucial component in the context of managing architectural issues, ATD, TD, and SATD. These systems provide a structured and organized way to track and manage tasks and issues related to software development. Here's how the Issue Tracker System relates to the topics you've mentioned:
 
-Task and Issue Tracking:
-An Issue Tracker System (or Issue Tracking System) is a central hub for managing and tracking tasks, issues, bug fixes, and feature requests. It provides a structured way to record, organize, and monitor the work that needs to be done. Each issue typically includes:
-Issue ID: A unique identifier for the issue.
-Summary: A concise title or description of the issue.
-Description: Detailed information about the issue, often including context, steps to reproduce, and expected behavior.
-Comments: A history of interactions, discussions, and updates related to the issue.
-Managing ATD:
+Issue Tracker System:
 
-Issue trackers are valuable for managing Architectural Technical Debt. When architectural problems or decisions lead to technical debt, these issues can be logged in the tracker. For example, issues related to suboptimal architecture can be created, and the team can prioritize and plan for architectural improvements. Over time, this helps to ensure that architectural issues are acknowledged and addressed.
+An Issue Tracker System, often known as a bug tracking system or project management tool, is a software application used by development teams to log, manage, and track various tasks and issues related to software development projects.
+Task Management:
 
-Addressing SATD:
-Self-admitted Technical Debt can also be recorded as issues in the tracker. When a developer identifies problematic code or architectural flaws and adds comments such as "TODO" or "Refactor," these comments can be translated into issues. This formalizes the need for improvement and provides a traceable path for addressing SATD.
+Issue Tracker Systems are used to manage a wide range of tasks, including bug fixes, new feature development, code improvements, and architectural enhancements. Each task is typically assigned a unique issue_id.
+Information Storage:
 
-Progress Tracking:
-An Issue Tracker System allows teams to track the status of each issue, assign responsibility, set priorities, and estimate the effort required for resolution. This helps in effectively managing the technical debt and ensures that improvements are not forgotten or left unattended.
+Issues in the tracker system contain important data, including:
+Summary: A brief description of the task or issue, which provides a quick overview.
+Description: A detailed explanation of the task, often including its scope, objectives, and any relevant background information.
+Comments: Ongoing discussions and updates related to the issue, allowing developers to collaborate and document progress.
+Architectural Issues and ATD:
 
-Historical Record:
-Issue trackers create a historical record of all tasks, improvements, bug fixes, and feature requests. This record is valuable for tracking changes over time, understanding the evolution of the software, and reviewing past decisions.
+Issues related to architectural problems and ATD can be tracked within the system. For example, if there is a known architectural flaw, it can be logged as an issue, including a detailed description and potential solutions. This helps in the structured management and resolution of architectural concerns.
+Technical Debt and SATD:
 
-Collaboration:
-Issue trackers facilitate collaboration and communication among team members. Developers can discuss issues, share insights, and document solutions or workarounds.
+Technical debt, including SATD, can also be documented and tracked within the system. Developers can explicitly mention technical debt in comments or issue descriptions. This makes it easier to prioritize and address technical debt as part of the development process.
+Collaboration and Communication:
 
-Data-Driven Decision Making:
-The data generated by an issue tracker can be used for data-driven decision-making, helping teams allocate resources effectively and prioritize work based on the project's needs.
+The comments section within an issue allows for collaborative discussions and communication between team members. This is crucial for addressing and resolving architectural issues, technical debt, and other tasks effectively.
+History and Tracking:
 
-In summary, an Issue Tracker System is an indispensable tool for managing technical debt, tracking improvements, and maintaining an organized and efficient software development process. It helps teams prioritize tasks, keep a historical record, and collaborate effectively, ensuring that ATD and SATD are addressed and that the software evolves in a controlled and well-documented manner.
+Issue Tracker Systems maintain a history of all tasks and their statuses. This history is invaluable for tracking the progress of tasks, understanding the evolution of the software, and making informed decisions about resource allocation and prioritization.
+
+In summary, the Issue Tracker System plays a pivotal role in the software development process by providing a centralized and structured platform for tracking, managing, and resolving various tasks and issues, including architectural concerns, technical debt, and self-admitted technical debt. It is a valuable tool for maintaining and improving the quality of software systems over time.
 ```
 
 ## Prompt3 (S1P3): 
 ```bash
-Here, we can see a set of SATD keywords found in the content of message commits, modified files diff in commits, and issue content from the issue tracker. These kinds of SATD keywords show technical debt in the item that the developer registers the keyword. Here are some of examples of SATD keywords:
+# Stage 1 #
+## Introduction ##
+### Keywords Samples ### 
+keywords found in the content of message commits, modified files diff in commits, and issue content from the issue tracker. These kinds of SATD keywords show technical debt in the item that the developer registers the keyword. Here are some of examples of SATD keywords:
 API
 FIXME
 TODO
@@ -93,7 +116,234 @@ ability to evolve
 ability to handle increased load
 annotation
 anti-pattern
-...
+any chance of a test
+architectural debt
+architectural issue
+architectural problem
+architectural smell
+avoid calling it twice
+avoid extra seek
+bad practice
+brittle code
+buggy code
+by hard coding instead of
+cast
+checkstyle errors
+circular dependency
+clean
+clean up code
+cleanup
+code cleanup
+code complexity
+code debt
+code defect
+code dependencies
+code difficulty
+code duplication
+code entanglement
+code flaw
+code improvement
+code interdependencies
+code issue
+code problem
+code redundancy
+code restructuring
+code rot
+code simplification
+code smell
+cognitive complexity
+comment
+complex code
+complex code relationships
+complexity
+concrete code
+concurrency issue
+confusing
+constructor
+cross-module
+cyclic dependency
+cyclomatic complexity
+dead code
+debug
+delicate code
+dependability
+dependencies
+dependency
+deprecated code
+design
+design debt
+design defect
+design flaw
+design flaws
+design issue
+design problem
+design smell
+difficult to maintain code
+difficult to understand code
+disorganized code
+documentation
+documentation debt
+documentation does not mention
+documentation doesn't match
+duplication
+ease of maintenance
+easy to break code
+encapsulation
+endpoints
+error message
+exception
+exposed internal state
+extension point
+fault tolerance
+files
+findbugs
+fix
+flaky
+flaky code
+formatting
+fragile code
+get rid of
+good to have coverage
+hack
+handling
+hard-coded strings
+hard-coded values
+header
+implementation
+implementation debt
+improvement
+inconsistency
+indirect dependency
+ineffective solution
+ineffective way
+inefficient solution
+inefficient way
+infinite loop
+inter-module
+interface
+it'd be nice
+it's not perfectly documented
+javadoc
+lack of abstraction
+lack of code comments
+lack of cohesion
+lack of documentation
+lack of encapsulation
+lack of generalization
+lack of information hiding
+lack of modularity
+lack of separation of concerns
+lack of test cases
+lack of testing
+latency
+lead to huge memory allocation
+leak
+less verbose
+literal strings
+literal values
+logging
+magic numbers
+magic strings
+maintainability
+maintainability issue
+make it less brittle
+makes it much easier
+makes it very hard
+minor
+misleading
+modularity
+module dependencies
+module-to-module
+monolithic code
+more efficient
+more readable
+more robust
+more tests
+more tightly coupled than ideal
+multithreading issue
+naming
+need to update documentation
+no longer needed
+not done yet
+not implemented
+not supported yet
+not thread safe
+not used
+output
+patch doesn't apply cleanly
+performance
+please add a test
+poor solution
+poor way
+poorly documented code
+poorly structured code
+poorly tested code
+quick fix
+race condition
+reduce duplicate code
+redundant
+refact
+refactor
+refactoring
+reliability
+rename
+repeated code
+response time
+robustness
+scalability
+scalability issue
+short term solution
+should be updated to reflect
+should improve a bit by
+simplify
+solution won't be really satisfactory
+some holes in the doc
+spaghetti code
+speed
+speed up
+spurious error messages
+suboptimal solution
+suboptimal way
+support for
+synchronization issue
+system dependencies
+system design problem
+takes a long time
+technical debt
+technical debt due to architectural issues
+technical debt due to design issues
+technical kludge
+temporary solution
+test
+test doesn't add much value
+testing debt
+there is no unit test
+throughput
+tidy up
+tight coupling
+too long
+too much
+trustworthiness
+typo
+ugly
+undocumented code
+undocumented strings
+undocumented values
+unnecessary
+unreliable code
+unstable
+untested code
+unused
+unused code
+unused import
+update
+violation
+wastes a lot of space
+work in progress
+workaround
+would significantly improve
+wrong solution
+wrong way
 ```
 
 ## Answer3 (S1A3): 
@@ -123,6 +373,9 @@ In practice, using SATD keywords in code comments or within an Issue Tracker Sys
 
 ## Prompt4 (S1P4):
 ```bash
+# Stage 1 #
+## Issues samples ##
+### Issues types ###
 Here, we can see an example of issue from Jira Apache Cassandra, that contains issue_type, summary, description and comments:
 
 issue_type: Improvement
@@ -157,19 +410,26 @@ spoke with [~adelapena] and we are going to block vectors from being reachable f
 
 ## Answer4 (S1A4):
 ```bash
-The example you provided is an issue from the Apache Cassandra project tracked in Jira. Let's break down the key information within this issue:
+Thank you for providing an example of an issue from Jira Apache Cassandra. Let's break down the components of this issue:
 
-Issue Type: The issue is classified as an "Improvement," indicating that it's a request for a new feature or enhancement.
+Issue Type: Improvement
 
-Summary: The summary provides a concise description of the proposed improvement. In this case, the improvement involves adding support for a new data type called "VECTOR" with specific properties like being a fixed-length array and not allowing null elements.
+The issue type indicates the nature of the task or problem. In this case, it's marked as an "Improvement," which suggests that the issue is about enhancing an existing feature or adding a new one.
+Summary:
 
-Description: The description provides more detailed information about the improvement. It references discussions on mailing lists and explains the desired properties of the "VECTOR" data type, including its characteristics. It also touches on the serialization format for vectors and highlights differences from other data types, with the author raising awareness about the explicit choice in serialization formats.
+The summary provides a concise description of the issue. In this case, it mentions "Added support for type VECTOR<type, dimension>," giving a high-level overview of the improvement being proposed.
+Description:
 
-Status: The status of the issue is "Resolved," which suggests that the improvement has been addressed or implemented.
+The description contains a more detailed explanation of the issue. It references discussions on the mailing list and outlines the desirable properties of a new data type called "VECTOR." It specifies properties like being a fixed-length array, non-null elements, and not being a multi-cell array.
+Status:
 
-Comments: The comments section contains a conversation related to the issue. Developers and contributors discuss various aspects, such as testing, serialization, codec behavior, and potential changes to existing data types like "ShortType." It also mentions issues related to ordering and potential corruption in the database's in-memory state. The comments reflect the collaborative and problem-solving nature of software development discussions.
+The status indicates the current state of the issue. In this example, it is marked as "Resolved," meaning the issue has been addressed.
+Comments:
 
-In open-source projects like Apache Cassandra, issue trackers play a crucial role in managing and tracking improvements, bug fixes, and new features. They facilitate communication among developers, provide a historical record of discussions and decisions, and help prioritize and organize the work required to enhance the software. The comments section, in particular, allows for in-depth discussions and collaboration among contributors to ensure that the proposed improvement is well-understood and implemented effectively.
+The comments section contains a discussion between developers about the issue. It touches on topics like testing challenges, serialization format, codec behavior, and potential optimizations for vector types.
+This example demonstrates how issues in a tracker can be diverse in nature, ranging from bug fixes to feature additions and architectural improvements. Additionally, the comments section is a valuable space for developers to collaborate, discuss challenges, and provide updates on the issue's progress.
+
+In your project, you can leverage the information within such issues, including summaries, descriptions, and comments, to build an issue classifier capable of identifying architectural impact and technical debt within these tasks. The presence of SATD keywords in these texts can be instrumental in automating the classification process and prioritizing the handling of such issues. If you have any more questions or need further guidance, please feel free to ask.
 ```
 
 # Stage 2 - Example Showcase:
@@ -180,6 +440,9 @@ You can see the following prompts: S2P1..S2P11
 
 ## Prompt5 (S2P1)
 ```bash
+# Stage 2 #
+## Issues samples ##
+### Issue Bug ###
 Here you can see an Bug issue:
 
 issue_type: Bug 
@@ -208,23 +471,31 @@ I was thinking per-disk splitting on flush can trigger this, but that's handled 
 
 ## Answer5 (S2A1):
 ```bash
-This is an example of a bug issue in the context of a software development project. Let's break down the key information within this bug issue:
+In this example, we have an issue of type "Bug." Let's break down the components of this bug issue:
 
-Issue Type: The issue is classified as a "Bug," which indicates that it represents an unexpected or unintended behavior in the software.
+Issue Type: Bug
 
-Summary: The summary provides a brief description of the bug. In this case, it relates to a problem with the reuse of a metadata collector, which can result in an incorrect key count calculation.
+The issue type categorizes the nature of the problem, which, in this case, is a "Bug." Bugs typically represent unexpected behavior or issues in the software.
+Summary:
 
-Description: The description provides a more detailed explanation of the bug. It describes the scenario where a metadata collector is reused during the flushing of a memtable. However, if the data is split into multiple SSTables, the cardinality estimation component within the reused metadata collector accumulates data from all of them. This leads to overestimated key counts when compacting these SSTables.
+The summary provides a concise description of the bug. It mentions "Reuse of metadata collector can break key count calculation," indicating the issue's core problem.
+Description:
 
-Status: The status of the issue is "Open," indicating that it has been identified but not yet resolved.
+The description goes into more detail about the bug. It explains that the bug occurs when flushing a memtable and reusing a metadata collector. The issue arises when the SSTableMultiWriter decides to split the data into multiple SSTables (e.g., for separate disks or driven by a compaction strategy). The problem is that the reused MetadataCollector contains data for all of the SSTables, leading to an overestimation of the number of keys in the resulting SSTables. This, in turn, affects the size of the bloom filter used for the compaction result.
+Status:
 
-Comments: The comments section contains a discussion related to the bug. Contributors discuss the impact of the bug and its relevance to different implementations of SSTable writers. They acknowledge that this bug might not affect the current implementations but highlight that it's something to be aware of and potentially fix when a compaction strategy necessitates splitting the flush output.
+The status indicates the current state of the issue, which, in this case, is marked as "Open." This suggests that the issue has been identified but has not yet been resolved.
+Comments:
 
-In software development, bug issues like this one are essential to maintain the quality and reliability of the software. Issue trackers help developers identify, track, and address such problems, and the comments section allows for collaborative discussions on how to resolve the issue. The status "Open" indicates that the bug is acknowledged, and the development team will work on a solution to fix it.
+The comments section contains a discussion between developers regarding the issue. They discuss the potential impact on different implementations of SSTableMultiWriter and note that the problem isn't currently an issue for some implementations. They also mention that this issue would need to be addressed when a compaction strategy requires splitting the flush output.
+This bug issue highlights the importance of tracking and addressing unexpected behavior or issues in the software. It shows how developers can use issue trackers to document, discuss, and work towards resolving these problems. If you have more questions or need further information about how to handle bug issues or integrate them into your issue classifier, please let me know.
 ```
 
 ## Prompt6 (S2P2)
 ```bash
+# Stage 2 #
+## Issues samples ##
+### Issue Improvement ###
 Here you can see an improvement issue:
 
 issue_type: Improvement 
@@ -248,26 +519,24 @@ Promoted writesData to member on OperationType and fixed unused import in a coup
 
 ## Answer6 (S2A2):
 ```bash
-This is an example of an improvement issue within a software development project, and here's an overview of the key information:
+This example is an issue of type "Improvement" from your project, and it provides insights into how improvement-related issues are documented in your issue tracker. Let's break down the components of this improvement issue:
 
-Issue Type: The issue is classified as an "Improvement," indicating that it represents a request to enhance or add a new feature to the software.
+Issue Type: The issue is categorized as an "Improvement," indicating that it pertains to enhancing or adding new features to the software system.
 
-Summary: The summary provides a concise description of the proposed improvement. In this case, the improvement relates to handling compactions more effectively by including an estimate of the disk space used by active compactions when starting a new compaction.
+Summary: The summary briefly describes the improvement. In this case, it mentions "Include estimated active compaction remaining write size when starting a new compaction," providing a concise overview of the enhancement.
 
-Description: The description section elaborates on the proposed improvement. It mentions several aspects that can be augmented to enhance compaction management:
+Description: The description provides more detailed information about the improvement. It outlines several enhancements that can be made to how compactions are handled, such as allowing the specification of free space in percentage rather than raw size, making adjustments on a per-disk basis, and including an estimate of disk space used by active compactions when performing calculations.
 
-Allowing specification of free space available as a percentage of the total rather than using a fixed size.
-Implementing this on a per-disk basis, taking into account ongoing compactions.
-Including an estimate of the disk space used by active compactions when performing the calculation, preventing issues due to concurrent compactions running.
-Status: The status of the issue is "Resolved," indicating that the proposed improvement has been addressed and implemented.
+Status: The issue's status is marked as "Resolved," indicating that the improvement has been addressed and implemented.
 
-Comments: The comments section provides additional information and links related to the issue. It includes links to a pull request (PR) and Continuous Integration (CI) pipelines for further validation and testing.
-
-In software development projects, improvement issues like this are important for enhancing the software's functionality and performance. They often result from discussions and feedback within the development community and are tracked to ensure that the proposed enhancements are implemented and thoroughly tested. The "Resolved" status indicates that the improvement has been successfully added to the software.
+Comments: The comments section contains a series of comments and discussions related to the improvement issue. It includes links to relevant pull requests and CI pipelines, indicating that the work has been done and tested. Additionally, there is information about changes made in the codebase, such as promoting "writesData" to a member on "OperationType" and fixing an unused import.
 ```
 
 ## Prompt7 (S2P3)
 ```bash
+# Stage 2 #
+## Issues samples ##
+### Issue New Feature ###
 Here you can see an New Feature Issue:
 
 issue_type: New Feature 
@@ -321,23 +590,29 @@ These are the new flaky tests once all the CI runs have finished:
 
 ## Answer7 (S2A3)
 ```bash
-This is an example of a New Feature issue within a software development project, and here's an overview of the key information:
+this new feature issue:
 
-Issue Type: The issue is classified as a "New Feature," indicating that it represents a request to introduce a new feature or functionality into the software.
+Issue Type: New Feature
 
-Summary: The summary provides a concise description of the proposed new feature. In this case, the new feature involves the implementation of an on-disk index for string (literal) datatypes. The new index supports various datatypes, including UTF8Type, AsciiType, CompositeType, and Frozen types. It also includes the ability to write the index to disk at index creation, specific index rebuilds, and during SSTable compaction.
+The issue type categorizes the nature of the task, which, in this case, is a "New Feature." New features represent requests or proposals to add entirely new capabilities or functionalities to the software.
+Summary:
 
-Description: The description section provides a detailed explanation of the new feature. It outlines the scope of the new index, its usage for specific datatypes, and the scenarios in which the index can be written to disk. It also mentions the ability to query the on-disk index and combine its results with in-memory indexes created by another issue (CASSANDRA-18058).
+The summary provides a concise description of the new feature. In this case, it mentions "On-disk string index with index building and on-disk query path," providing an overview of the proposed feature.
+Description:
 
-Status: The status of the issue is "Resolved," indicating that the proposed new feature has been successfully implemented.
+The description offers more detailed information about the new feature. It explains that the feature involves the creation of an on-disk index for string (literal) data types, such as UTF8Type, AsciiType, CompositeType, and Frozen types. The on-disk index is designed to be written to disk at index creation, during specific index rebuilds, and during SSTable compaction. It also outlines the capability to query the on-disk index and combine the results with those from in-memory indexes created by another related issue (CASSANDRA-18058).
+Status:
 
-Comments: The comments section contains additional information and links related to the issue. It includes links to a pull request (PR) and discussions regarding the development, testing, and integration of the new feature.
+The issue's status is marked as "Resolved," indicating that the new feature has been successfully implemented.
+Comments:
 
-In software development projects, new feature issues like this are important for enhancing the software's capabilities and addressing user needs or requests. Issue trackers help developers plan, implement, and validate the new feature, and the "Resolved" status indicates that the new feature has been added to the software. Discussions and testing ensure that the feature is stable and ready for use.
+The comments section contains various comments and discussions related to the new feature issue. It includes a link to the associated pull request (PR) and mentions the process of rebasing the branch. There are also discussions about the release version and testing processes. The comments indicate that the feature is ready for merging and further testing to address flakiness.
+This new feature issue demonstrates how software development teams can track, discuss, implement, and test entirely new functionalities or capabilities within the software. It showcases the collaborative and iterative nature of software development. If you have more questions or need further information on how to manage new feature issues in your project, please feel free to ask.
 ```
 
 ## Prompt8 (S2P4)
 ```bash
+# Stage 2 #
 ## Instructions ###
 "Architectural impact" in software systems is the effect that design decisions made at the architectural level have on the system's overall quality attributes, such as performance, scalability, maintainability, security, and reliability.
 
@@ -354,28 +629,31 @@ A decision to use a cloud-based architecture can reduce the cost and complexity 
 
 ## Answer8 (S2A4):
 ```bash
-You've provided excellent examples of architectural impact in software systems. Let's explore each of them in more detail:
+Understanding "architectural impact" in software systems is crucial for assessing how design decisions at the architectural level can affect a system's overall quality attributes. These quality attributes encompass performance, scalability, maintainability, security, and reliability.
+
+Architectural impact can take on both positive and negative dimensions. For instance, a decision to adopt a microservices architecture can enhance scalability and maintainability but may also introduce complexity and make debugging more challenging.
+
+Here are some specific examples of architectural impact:
 
 Distributed Architecture:
 
-Positive Impact: Improved scalability and performance. A distributed architecture allows the system to handle a larger number of requests and process data more efficiently by distributing the workload across multiple servers or nodes.
-Negative Impact: Increased complexity and management challenges. Managing a distributed system can be more complex due to issues like network communication, data consistency, and fault tolerance.
-Debugging and monitoring become more challenging.
-
+Positive Impact: Improved Scalability and Performance
+Negative Impact: Increased Complexity and Management Challenges
 Layered Architecture:
 
-Positive Impact: Enhanced maintainability and security. A layered architecture separates the system into distinct layers, making it easier to manage and maintain. Each layer has a specific responsibility, simplifying updates and reducing the risk of security vulnerabilities.
-Negative Impact: Reduced performance. The separation of layers can introduce overhead in terms of data transfer and processing, potentially affecting system performance. However, the impact on performance may vary depending on the architecture's specific design.
-
+Positive Impact: Enhanced Maintainability and Security
+Negative Impact: Potential Reduction in Performance
 Cloud-Based Architecture:
 
-Positive Impact: Reduced cost and complexity. Utilizing cloud services can lower infrastructure costs and simplify system management. Cloud providers handle tasks like hardware maintenance and scaling, allowing developers to focus on application logic.
-Negative Impact: Increased vulnerability to attacks. Relying on external cloud services can expose the system to potential security risks, such as data breaches or service outages. It's crucial to implement strong security measures and follow best practices.
-These examples demonstrate that architectural decisions have far-reaching consequences on various quality attributes of a software system. When making architectural choices, it's important to consider the trade-offs and carefully assess how they align with the project's goals and requirements. Ultimately, architectural impact analysis is an integral part of designing robust and effective software systems.
+Positive Impact: Reduced Cost and Simplified System Management
+Negative Impact: Increased Vulnerability to Attacks
+Assessing architectural impact is essential during the design and decision-making process to strike a balance between the desired quality attributes and potential drawbacks. Making informed choices is key to achieving a well-structured, efficient, and reliable software system.
 ```
 
 ## Prompt 9 (S2P5)
 ```bash
+# Stage 2 #
+## Architectural impact examples ###
 Here are some other examples of architectural impacts in software systems:
 
 Performance: The choice of programming language, database, and other technologies can have a significant impact on the performance of a software system. For example, a system written in a compiled language such as C++ will generally perform better than a system written in an interpreted language such as Python.
@@ -391,87 +669,50 @@ Reliability: The ability of a system to operate correctly over time is also impo
 
 ## Answer9 (S2A5)
 ```bash
-These additional examples of architectural impacts in software systems further highlight the critical role of architectural decisions in shaping a system's overall quality attributes:
+Certainly, architectural impact in software systems can manifest in various ways. Here are additional examples of architectural impacts that can influence different quality attributes:
 
 Performance:
 
-Positive Impact: The choice of technologies, such as a compiled language like C++, can lead to improved system performance. Compiled languages typically offer faster execution speeds than interpreted languages.
-Negative Impact: Opting for an interpreted language like Python may result in slower performance due to the interpretation step during execution. Performance issues can affect response times and user experience.
-
+Choice of Technology: The selection of programming languages, databases, and frameworks can significantly impact system performance. For instance, systems built with compiled languages like C++ often exhibit better performance compared to those using interpreted languages like Python.
+Algorithmic Decisions: The choice of algorithms and data structures can have a profound effect on system performance. Optimal algorithms can reduce processing time and resource consumption.
 Scalability:
 
-Positive Impact: Architectural choices like a distributed or cloud-based architecture can enhance a system's scalability. These approaches allow the system to handle increased load by adding more resources as needed.
-Negative Impact: Neglecting scalability considerations can lead to bottlenecks and system instability when faced with growing user demands. Inadequate scaling can result in poor user experience and reduced system reliability.
-
+Distributed Architecture: Implementing a distributed architecture can enhance a system's ability to scale horizontally, accommodating increased load and users.
+Cloud-Based Solutions: Leveraging cloud services can provide on-demand scalability, allowing resources to be dynamically allocated as needed.
 Maintainability:
 
-Positive Impact: Architectural decisions, such as adopting a layered or modular architecture, can make it easier to modify and extend a system. Separation of concerns and clear boundaries between components contribute to improved maintainability.
-Negative Impact: Complex, tightly-coupled architectures can hinder maintenance efforts, making it difficult to isolate and update specific parts of the system. Poor maintainability can lead to costly and error-prone development.
-
+Layered Architecture: A well-structured layered architecture simplifies system maintenance by separating concerns and promoting modularity. Changes in one layer have minimal impact on others.
+Modular Architecture: Modular systems enable developers to modify or extend specific components without disrupting the entire system, enhancing maintainability.
 Security:
 
-Positive Impact: Security-focused architectural choices, like a layered architecture with strict access controls or a least-privilege approach, can enhance a system's ability to protect itself from attacks. Separating components with different security levels can mitigate vulnerabilities.
-Negative Impact: An insecure architectural design, with insufficient access control or unsecured communication between components, can expose the system to security risks. Security breaches can result in data leaks, unauthorized access, or service disruptions.
-
+Layered Architecture: A layered architecture can contribute to security by isolating sensitive components from external access, reducing potential attack vectors.
+Least-Privilege Principle: Restricting access to only the necessary resources or functionalities (least privilege) can bolster system security.
 Reliability:
 
-Positive Impact: Architectural strategies that incorporate fault tolerance and redundancy techniques can improve a system's reliability. Redundant components and failover mechanisms can help the system continue operating correctly in the presence of failures.
-Negative Impact: Neglecting reliability considerations can result in system outages, data loss, and unexpected errors. Unforeseen failures can disrupt services and damage the system's reputation.
-These examples illustrate how architectural decisions influence key quality attributes of software systems. Developers and architects must carefully assess and balance these impacts to align the architecture with the project's goals and requirements effectively.
+Fault Tolerance: Architectural choices that include fault tolerance mechanisms, such as redundancy and failover strategies, can ensure system reliability by minimizing downtime.
+Redundancy Techniques: Implementing redundancy, either through hardware or software redundancy, can mitigate the impact of hardware failures and enhance system reliability.
+These examples illustrate how architectural decisions can impact a software system's performance, scalability, maintainability, security, and reliability. It's essential for architects and developers to carefully consider these factors during the design and development stages to achieve the desired quality attributes while managing potential drawbacks.
 ```
 
 ## Prompt 10 (S2P6)
 ```bash
-### Instructions ###
-Based on content discussed previously, lets create a classifier for architectural technical debt, we can classify issues to check if they have architectural impact and technical debt in the software, or if they do not have architectural impact and technical debt. I will provide here some examples of issues with Architectural Technical Debt and other issues without Architectural Technical Debt.
+# Stage 2 #
+## Instructions ##
+I want a issue classifier that does not have all steps related to machine learning process, i.e, less formal, in this case, we use only contextualization, instruction and examples to analyze the content of issue (summary, description, comments) of issues. 
 ```
 
 ## Answer 10 (SP2P6)
 ```bash
-Creating a classifier for architectural technical debt requires a labeled dataset of issues, where each issue is categorized as either having architectural technical debt or not. With a labeled dataset, you can train a machine learning model to classify new issues. Below are examples of issues for both categories to help you get started:
+Understood. In this issue classifier, we will focus on using contextualization, instructions, and examples to analyze the content of issues (summary, description, comments) without delving into the formal machine learning process. This approach will help us determine whether an issue has "Architectural Impact" or not based on the information provided in the text.
 
-Issues with Architectural Technical Debt:
-
-Issue Type: Bug
-
-Summary: "Performance degradation observed in the last release."
-Description: "After the last release, users have reported significant performance degradation. It seems that the architectural changes we made in the previous release have introduced technical debt that's impacting performance."
-Issue Type: Improvement
-
-Summary: "Refactor monolithic code into microservices."
-Description: "Our current monolithic architecture is causing scalability and maintainability issues. We need to refactor the codebase into microservices to address architectural technical debt."
-Issue Type: Task
-
-Summary: "Address database schema inconsistencies."
-Description: "Over time, our database schema has become inconsistent due to ad-hoc changes. This architectural technical debt needs to be addressed to maintain data integrity."
-Issue Type: Technical Debt
-
-Summary: "Identify and document architectural technical debt items."
-Description: "We need to perform an audit of our software architecture to identify and document areas where architectural technical debt has accumulated. This will help us prioritize future improvements."
-Issues without Architectural Technical Debt:
-
-Issue Type: Feature
-
-Summary: "Add user profile picture feature."
-Description: "This feature request involves adding the ability for users to upload profile pictures. It does not impact the software's architecture."
-Issue Type: Documentation
-
-Summary: "Update user guide with new features."
-Description: "This task is about updating the user guide to reflect recent feature additions. It does not involve architectural changes."
-Issue Type: Task
-
-Summary: "Fix typo in error message."
-Description: "There's a minor typo in one of the error messages. This is a straightforward task that doesn't affect the software's architecture."
-Issue Type: Bug
-
-Summary: "Incorrect sorting in search results."
-Description: "The search results are not sorting correctly. This is a bug that can be fixed without architectural changes."
-You can use these example issues to create a labeled dataset for training your classifier. Each issue should be labeled as either "Architectural Technical Debt" or "No Architectural Technical Debt." Once you have a dataset, you can proceed with preprocessing, feature extraction, model selection, training, evaluation, and deployment as mentioned earlier. If you have any specific questions or need further guidance on any of these steps, please feel free to ask.
+Let's proceed with analyzing the provided issues using this approach. If you have specific issues or content you'd like to start with, please provide them, and we can begin the analysis
 ```
 
 ## prompt 11 (S2P7)
 ```bash
-Here is an example of issue with Architectural Technical Debt:
+# Stage 2 #
+## Architectural impact example ##
+Here is an example of issue with Architectural impact:
 
 issue_type: New Feature
 
@@ -522,22 +763,28 @@ These are the new flaky tests once all the CI runs have finished:
 
 ## Answer11 (S2A7): 
 ```bash
-The issue you provided is an example of an issue with architectural technical debt. It falls under the "New Feature" category but involves architectural changes that impact the software's design. Here are the key indicators that suggest architectural technical debt:
+ This is an example of an issue with Architectural Impact. Let's break it down:
 
-Summary: The summary mentions the creation of an "on-disk string index with index building and on-disk query path." This indicates a significant architectural change.
+Issue Type: New Feature
 
-Description: The description explains the need for an on-disk index for various data types and mentions the ability to write the index to disk at index creation, rebuild it, and use it during SSTable compaction. These activities involve architectural modifications.
+Summary: The issue is about introducing a new feature, specifically an on-disk string index with index building and on-disk query functionality.
 
-Comments: The comments include discussions about merging, rebasing, and running tests. These conversations are typical when addressing architectural changes, as they require careful handling and testing to ensure they don't introduce issues.
+Description: The description provides details about the new feature. It mentions the creation of an on-disk index for various string data types, including UTF8Type, AsciiType, CompositeType, and Frozen types. This index can be written to disk during index creation, specific index rebuild, and SSTable compaction. Additionally, it mentions the ability to query the on-disk index and combine results with in-memory indexes created by a previous issue (CASSANDRA-18058).
 
-In contrast, issues without architectural technical debt are typically straightforward, often related to bug fixes, minor feature additions, documentation updates, or code refactoring that doesn't impact the system's architecture.
+Status: The issue is marked as "Resolved," indicating that the work on this feature has been completed.
 
-For building a classifier, you would need a dataset with labeled issues like this one, indicating whether they involve architectural technical debt or not. With such a dataset, you can train a machine learning model to automatically classify new issues based on their content and context. If you have more examples or specific questions about creating a classifier, please let me know.
+Comments: The comments section includes discussions related to the issue, such as links to the pull request (PR) for the feature, information about rebase, and decisions regarding the release version. There's also mention of running tests before merging to ensure no new test failures are introduced.
+
+Architectural Impact: This issue has a positive architectural impact by introducing a new feature that enhances the system's capabilities. It improves the system's ability to efficiently handle on-disk string data indexing and querying, which can have a positive impact on performance, scalability, and maintainability.
+
+This example demonstrates how architectural impact can be identified by analyzing the content of issues, even without formal machine learning processes. It involves understanding the nature of the proposed changes and their potential effects on the system's quality attributes.
 ```
 
 ## Prompt12 (S2P8)
 ```bash
-Here another example of issue with Architectural Technical Debt:
+# Stage 2 #
+## Architectural impact example ##
+Here another example of issue with Architectural impact:
 
 issue_type: Improvement
 
@@ -560,22 +807,29 @@ Promoted writesData to member on OperationType and fixed unused import in a coup
 
 ## Answer12 (S2A8):
 ```bash
-This is another example of an issue with architectural technical debt. The issue type is "Improvement," but the nature of the improvement involves architectural changes and considerations. Here's why this issue can be classified as having architectural technical debt:
+Issue Type: Improvement
 
-Summary: The summary mentions the improvement of including the estimated active compaction remaining write size when starting a new compaction. This indicates that the proposed change is not just a minor improvement but involves architectural considerations.
+Summary: The issue is about improving the way compactions are handled locally. It aims to include an estimated active compaction remaining write size when starting a new compaction.
 
-Description: The description outlines several enhancements related to how compactions are handled locally. These enhancements include allowing the specification of free space in terms of percentages, on a per-disk basis, and considering the disk space of active compactions. These changes have architectural implications, as they affect the overall design and performance of compaction processes.
+Description: The description outlines the improvements that can be made in how compactions are handled locally. The key points include:
 
-Comments: The comments include references to a pull request (PR) and CI (Continuous Integration) pipelines. These are typical in scenarios where architectural changes are being proposed, as thorough testing and reviews are necessary to ensure that architectural modifications do not introduce issues.
+Allowing the specification of free space available in percent rather than raw size.
+Implementing these changes on a per-disk basis, based on ongoing compactions.
+Including an estimate of the disk space used by active compactions in-flight when calculating the available space to prevent exceeding limits due to concurrent runs.
+Status: The issue is marked as "Resolved," indicating that the proposed improvements have been implemented.
 
-In contrast, issues without architectural technical debt are typically more straightforward and do not require significant changes to the system's architecture.
+Comments: The comments section includes information about the pull request (PR) related to this issue, links to CI pipelines for testing, and details about changes made, such as promoting "writesData" to a member on "OperationType" and fixing unused imports.
 
-Creating a classifier for architectural technical debt would involve using a dataset of labeled issues like this one, indicating whether they involve architectural changes and technical debt. You can then train a machine learning model to automatically classify new issues based on their content and context. If you have more examples or specific questions about creating a classifier, please feel free to ask.
+Architectural Impact: This issue has a positive architectural impact by improving the system's compaction process. It enhances the way the system manages disk space during compactions, which can positively affect performance, scalability, and reliability. It ensures that the system efficiently utilizes available disk space during compaction processes, preventing potential issues related to running out of space.
+
+This example demonstrates how architectural impact can be identified by analyzing the content of issues, even without formal machine learning processes. It involves understanding the nature of the proposed changes and their potential effects on the system's quality attributes.
 ```
 
 ## Prompt13 (S2P9)
 ```bash
-Here is another issue with Architectural Technical Debt:
+# Stage 2 #
+## Architectural impact example ##
+Here is another issue with Architectural impact:
 
 issue_type: Bug
 
@@ -603,22 +857,20 @@ I was thinking per-disk splitting on flush can trigger this, but that's handled 
 
 ## Answer13 (S2A9):
 ```bash
-This is another example of an issue with architectural technical debt. Let's break down why this issue falls into that category:
+Description: The description highlights the problem. When flushing a memtable, a constructed MetadataCollector is passed to the SSTableMultiWriter used for writing SSTables. If the SSTableMultiWriter decides to split the data into multiple SSTables, the reused MetadataCollector for each individual SSTable contains data for all of them. This leads to incorrect cardinality estimations for the number of keys in the resulting SSTables, which are used to determine the size of the bloom filter for compaction results. This overestimation results in much larger L1 bloom filters than they should be.
 
-Issue Type: The issue type is "Bug." While it's categorized as a bug, the description and comments indicate that it relates to architectural considerations and technical debt in the design.
+Status: The issue is marked as "Open," indicating that it has not been resolved yet.
 
-Summary: The issue summary mentions a problem related to the reuse of metadata collectors that can break key count calculations. This problem has architectural implications, as it's related to how the system handles and processes metadata.
+Comments: The comments section includes a discussion about the issue, with considerations regarding its impact on existing SSTableMultiWriter implementations. It is noted that the problem doesn't affect some current implementations, and it should be addressed when a compaction strategy needs to split the flush output.
 
-Description: The description explains in detail how the issue affects the system's behavior. It highlights the fact that when flushing a memtable, a constructed MetadataCollector is passed to the SSTableMultiWriter. This reuse of the MetadataCollector causes problems when data is split into multiple SSTables. The issue points out that the cardinality estimation component within the reused MetadataCollector contains data for all of the split SSTables, leading to overestimated values. This overestimation impacts the size of the bloom filter used in compaction results.
-
-Comments: The comments provide additional context and discussion around the issue. They acknowledge that the problem may not affect all current implementations of SSTableMultiWriter, which implies that this is an architectural issue that needs to be addressed and fixed.
-
-In summary, this issue is an example of architectural technical debt because it highlights a problem in the system's architecture and design that needs to be resolved to maintain system quality and performance.
+Architectural Impact: This issue has a negative architectural impact on the system's performance and resource usage. The incorrect key count calculations and overestimated bloom filter sizes can lead to increased memory usage and potentially impact the system's performance during compactions. It highlights the importance of correctly managing and isolating metadata when dealing with split data in SSTables to avoid these issues.
 ```
 
 ## Prompt14 (S2P10)
 ```bash
-Here is an example of issue that does not have Architectural Technical Debt:
+# Stage 2 #
+## Architectural impact example ##
+Here is an example of issue that does not have Architectural Impact:
 
 issue_type: Bug
 
@@ -689,27 +941,31 @@ Committed.
 Integrated in Cassandra #153 (See [http://hudson.zones.apache.org/hudson/job/Cassandra/153/])
     run source files through dos2unix to standardize on \n line endings.  patch by Jeff Hodges; reviewed by Michael Greene for 
 
-Integrated in Cassandra #158 (See
+Integrated in Cassandra #158
 ```
 
 ## Answer14 (S2A10):
 ```bash
-This is an example of an issue that does not have architectural technical debt:
+Here's an example of an issue that does not have Architectural Impact:
 
-Issue Type: The issue type is "Bug." However, the problem mentioned in this issue is not related to architectural considerations or technical debt in the design. It's a relatively straightforward issue involving line endings in the codebase.
+Issue Type: Bug
 
-Summary: The issue summary states that there are mixed line endings in the codebase. This problem is about ensuring consistent line endings in the code, which is more of a code style issue rather than an architectural one.
+Summary: The issue is related to mixed line endings in the codebase.
 
-Description: The description explains that there are line endings with DOS line endings (\r\n) in the codebase, and the patch aims to remove the DOS line endings and standardize on Unix line endings (\n). It discusses the benefits of using consistent line endings for ease of development but doesn't delve into architectural issues.
+Description: The description points out that there are inconsistencies in line endings in the codebase. Some files have DOS line endings, and the patch is aimed at removing DOS line endings and converting them to Unix line endings. The goal is to achieve consistency in line endings throughout the codebase.
 
-Comments: The comments mainly discuss the process of correcting line endings, setting up Subversion properties for automatic handling, and the preference for Unix line endings. There is no discussion of architectural implications.
+Status: The issue is marked as "Resolved," indicating that it has been addressed.
 
-In summary, this issue is focused on code style and formatting (line endings) but does not address architectural concerns or technical debt in the software's design.
+Comments: The comments section contains a discussion about the process of standardizing on Unix line endings. It includes a script used to convert files to Unix line endings and suggestions for setting Subversion properties and configurations for handling line endings. There is support for making this change to Unix line endings, and the issue is eventually committed.
+
+Architectural Impact: This issue does not have a significant architectural impact on the system. It addresses a coding style consistency concern but does not have a direct impact on the performance, scalability, maintainability, security, or reliability of the software system. It is more of a coding practice improvement rather than an architectural change.
 ```
 
 ## Prompt15 (S2P11):
 ```bash
-Here is another example of issue that does not have Architectural Technical Debt
+# Stage 2 #
+## Architectural impact example ##
+Here is another example of issue that does not have Architectural Impact
 
 issue_type: New Feature
 
@@ -739,6 +995,7 @@ agree
 UDFs are not a requirement for this one - but may help to quickly add new functionality with the option to optimize that later (using CASSANDRA-7085, optimized slice queries etc)
 
 bq. slicing capabilities map[key1..key2] 
+
 
 maybe also to check which keys are present for a slice (or at all) and return these keys
 
@@ -779,31 +1036,46 @@ But there’s room for optimization to prevent unnecessary internal serializatio
 
 ## Answer15 (S2A11): 
 ```bash
-This is an example of an issue that does not have architectural technical debt:
+Here's an example of an issue that does not have Architectural Impact:
 
-Issue Type: The issue type is "New Feature." It is focused on adding new features or capabilities to the software.
+Issue Type: New Feature
 
-Summary: The issue summary suggests allowing the selection of map values and set elements, which is a feature enhancement rather than a bug fix.
+Summary: The issue is about allowing the selection of Map values and Set elements in queries.
 
-Description: The description details the proposal for the feature, including syntax for accessing map values, checking the existence of elements, and performing slicing operations. The discussion is about enhancing the query language's capabilities for working with collections (maps, sets, lists) efficiently.
+Description: The description suggests allowing the use of "SELECT map['key]" and "SELECT set['key']." This feature would enable users to retrieve specific map values or set elements directly in queries.
 
-Comments: The comments provide additional insights and suggestions for the proposed feature. They discuss the use of user-defined functions (UDFs) and the potential optimizations for handling the new operations on collections. The comments focus on improving the feature's implementation and performance, but there is no mention of architectural issues or technical debt.
+Status: The issue is marked as "Resolved," indicating that the new feature has been implemented.
 
-In summary, this issue is about enhancing the query language to work with collections efficiently and does not involve architectural concerns or technical debt in the software's design.
+Comments: The comments section contains a discussion about the syntax and functionality of the proposed feature. It includes considerations about using User-Defined Functions (UDFs) and optimizing the operations. There are suggestions and proposals for extending the feature to include slicing capabilities and checks for the existence of keys in maps and elements in sets. The discussion also mentions building a proof of concept (POC) to illustrate the functionality.
+
+Architectural Impact: This issue does not have a significant architectural impact on the system. It introduces a new feature for querying specific elements within collections (maps and sets) but does not fundamentally alter the system's architecture. The proposed feature is more related to query language improvements and does not directly impact performance, scalability, maintainability, security, or reliability of the software system.
 ```
 
-# Stage 3 - Data Preparation:
+## Prompt 16 (S4P1)
+```bash
+# Stage 4 #
+# Instruction #
+Now,  in the Stage 4 (Issue classifier) is responsable to analyze each issue using the summary, description and comments of issue to check if there is "Architectural impact" or does not have "Architectural Impact" in the software. Also, it is necessary to justify the answer based on content of issue about architectural impact. You can also add a label Archictural Impact:Yes if the issues has architectural impact or label Architectural Impact:No. After the justification of Architectural Impact.
+```
 
-We generated individual .txt files for each of the 100 issues for inspection. Each file should contain detailed issue information, including issue ID, type, status, summary, description, and comments.
+# Using the model 
 
-# Stage 4 - Manual Inspection
+After setup the "model" with prompts aforementioned, you can pass the content of the issue, copy answer from ChatGPT and save the result of inspection by ChatGPT in a .txt file.
 
-The 100 issues are selected for manual inspection. We saved the results of these manual inspections in 100 separate .txt files to be evaluated in other stage.
+# Overview Validation Process 
 
-# Stage 5 - ChatGTP Inspection
+## Data Preparation:
 
-We utilized ChatGPT to inspect each of the 100 .txt files representing issues. The primary goal is to identify potential architectural impacts, architectural issues, and/or technical debt within the analyzed issues. Also we requested justification for each inspection. Finally, we saved the results of these ChatGPT inspections in 100 separate .txt files to be evaluated in other stage.
+We generated individual .txt files for each of the 163 issues for inspection. Each file should contain detailed issue information, including issue ID, type, status, summary, description, and comments.
 
-# Stage 6 - Manual Review:
+## Manual Inspection
 
-Finally, in the last stage we conducted a manual review of all 100 sets of inspection results (.txt files) both manual inspection and inspection by ChatGPT. Cohen's Kappa coefficient is calculated to compare the agreement between the results obtained in the manual inspection and inspection by ChatGPT. This helps assess the consistency between manual and automatic inspections, contributing to a precise analysis of the relationship between critical issues and their impact on the software's architecture.
+The 163 issues are selected for manual inspection. We saved the results of these manual inspections in 163 separate .txt files to be evaluated in other stage.
+
+## ChatGTP Inspection
+
+We utilized ChatGPT to inspect each of the 163 .txt files representing issues. The primary goal is to identify potential architectural impacts, architectural issues, and/or technical debt within the analyzed issues. Also we requested justification for each inspection. Finally, we saved the results of these ChatGPT inspections in 163 separate .txt files to be evaluated in other stage.
+
+## Manual Review:
+
+Finally, in the last stage we conducted a manual review of all 163 sets of inspection results (.txt files) both manual inspection and inspection by ChatGPT. Cohen's Kappa coefficient is calculated to compare the agreement between the results obtained in the manual inspection and inspection by ChatGPT. This helps assess the consistency between manual and automatic inspections, contributing to a precise analysis of the relationship between critical issues and their impact on the software's architecture.
