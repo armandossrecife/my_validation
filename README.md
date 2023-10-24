@@ -6,6 +6,8 @@ Here, you will find the following files:
 
 **My_Commits_and_my_Issues_from_Cassandra.ipynb** - A Google Colab notebook that contains all Python scripts, methods, and datasets required to validate the ATDCodeAnalyzer method.
 
+**avalia_modelo_inspecao.ipynb** - A Google Colab notebook that compares manual inspection and ChatGPT inspection results.
+
 **commits_com_muitos_arquivos_moficiados.xlsx** - A spreadsheet containing remarkable commits with many modified files and many lines modified per commit. 
 
 **issues_in_commits_detailed_muitos_arquivos.xlsx** - A spreadsheet containing the issues that appear in remarkable commits.
