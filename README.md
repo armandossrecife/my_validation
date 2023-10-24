@@ -16,8 +16,8 @@ Here, you will find the following files:
 
 **my_inspection.zip** - A zip file that holds the results of the inspection for checking architectural issues and technical debt.
 
-**inspecao_manual.xlsx** - A spreadsheet containing the results of manual inspections.
+**inspecao_manual.xlsx** - A spreadsheet containing the results of manual inspections (falta atualizar...).
 
-**inspecao_by_chatgpt.xlsx** - A spreadsheet containing the results of manual inspections.
+**inspecao_by_chatgpt.xlsx** - A spreadsheet containing the results of manual inspections (falta atualizar....).
 
-**inspecao_completa.xlsx** - A spreadsheet containing the results of inspections (merge of inspecao_manual and inspecao_by_chatgpt).
+**inspecao_merge_manual_chatgpt.xlsx** - A spreadsheet containing the results of inspections (merge of inspecao_manual and inspecao_by_chatgpt).
