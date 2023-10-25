@@ -1051,6 +1051,14 @@ Comments: The comments section contains a discussion about the syntax and functi
 Architectural Impact: This issue does not have a significant architectural impact on the system. It introduces a new feature for querying specific elements within collections (maps and sets) but does not fundamentally alter the system's architecture. The proposed feature is more related to query language improvements and does not directly impact performance, scalability, maintainability, security, or reliability of the software system.
 ```
 
+# Stage 3 (Data Preparation) involves the manual selection of issues to be inspected.
+
+Input Set: List of .txt files containing detailed issue information.
+
+# Stage 4 (Final instruction to start the inspection by ChatGPT)
+
+The last prompt to be executed before start the semi-automatic inspection.
+
 ## Prompt 16 (S4P1)
 ```bash
 # Stage 4 #
