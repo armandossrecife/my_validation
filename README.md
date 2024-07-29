@@ -23,3 +23,7 @@ Here, you will find the following files:
 **inspecao_by_chatgpt.xlsx** - A spreadsheet containing the results of manual inspections (falta atualizar....).
 
 **inspecao_merge_manual_chatgpt.xlsx** - A spreadsheet containing the results of inspections (merge of inspecao_manual and inspecao_by_chatgpt).
+
+## Updates
+
+New version: https://github.com/armandossrecife/my_validation3
